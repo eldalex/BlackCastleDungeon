@@ -47,52 +47,43 @@ class Character_Inventory:
                            "item7":None,
                            "item8":None,
                            "item9":None}
-        # self.item1 = None
-        # self.item2 = None
-        # self.item3 = None
-        # self.item4 = None
-        # self.item5 = None
-        # self.item6 = None
-        # self.item7 = None
-        # self.item8 = None
-        # self.item9 = None
 
     def add_item(self, item):
-        for i in self.char_items:
-            if self.char_items[i]!=None:
-                if self.char_items[i]["item_id"]==item.item_id:
-                    self.char_items[i]["count"]+=item.count
-                    break
+        success=False
+        usage_slots=0
+        #проверка на присутствие + попытка добавить
+        if success==False:
+            for i in self.char_items:
+                if self.char_items[i] != None:
+                    if self.char_items[i].item_id == item.item_id:
+                        self.char_items[i].count += item.count
+                        success=True
+                        break
+        # Предметов этого типа нет, тогда подсчитаем количество занятых слотов
+        if success==False:
+            for i in self.char_items:
+                if self.char_items[i] != None:
+                    usage_slots += 1
+            # Если количество слотов позволяет, то запишем новый слот
+            if usage_slots < self.slots:
+                for i in self.char_items:
+                        if self.char_items[i]==None:
+                            self.char_items[i] = item
+                            break
             else:
-                self.char_items[i]={"item_id":item.item_id,"count":item.count}
-                break
+                print('место закончилось')
 
-        #
-        # if self.item1 != None:
-        #     if self.item1.item_id == item.item_id:
-        #         self.item1.count+=item.count
-        # elif self.item1 == None:
-        #     self.item1 = item
-        # elif self.item2 == None:
-        #     self.item2 = item
-        # elif self.item3 == None:
-        #     self.item3 = item
-        # elif self.item4 == None:
-        #     self.item4 = item
-        # elif self.item5 == None:
-        #     self.item5 = item
-        # elif self.item6 == None:
-        #     self.item6 = item
-        # elif self.item7 == None:
-        #     self.item7 = item
-        # elif self.slots == 9 and self.item8 == None:
-        #     self.item8 = item
-        # elif self.slots == 9 and self.item9 == None:
-        #     self.item9 = item
+    def change_backpack(self):
+        self.slots=9
 
-    def get_item(self, id):
-        item = GameItemsModel.get(id=id)
-        return item
+    def delete_item(self,item_id):
+        for item in self.char_items:
+            if self.char_items[item].item_id==item_id:
+                self.char_items[item]=None
+    #
+    # def get_item(self, id):
+    #     item = GameItemsModel.get(id=id)
+    #     return item
 
 
 class Game_Character:
@@ -136,7 +127,7 @@ def create_character():
     print('Крутим кубы')
     dice1, dice2 = roll_the_dice(2)
     summa = dice1 + dice2
-    print(f'Кубик1:{dice1}, Кубик2{dice2}')
+    print(f'Кубик1:{dice1}, Кубик2:{dice2}')
     char = Game_Character(name='Alex',
                           max_agility=start_stats[summa]['agility'],
                           current_agility=start_stats[summa]['agility'],
@@ -148,22 +139,14 @@ def create_character():
     bd_item = GameItemsModel.get(id=1)
     item = Game_Items(bd_item.id, bd_item.name, count=3)
     char_inventory.add_item(item)
-    bd_item = GameItemsModel.get(id=1)
-    item = Game_Items(bd_item.id, bd_item.name, count=5)
-    char_inventory.add_item(item)
-    item.increase_count()
-    print(f"Отлично! персонаж создан!\n"
-          f"Имя:{char.name}\n"
-          f"Ловкость:{char.max_agility}\n"
-          f"Сила:{char.max_strange}\n"
-          f"Харизма:{char.max_charm}\n"
-          f"Удача:{char.lucky}\n")
-    print(f"инвентарь:{char_inventory.item1.name, char_inventory.item1.count}")
     dice1 = roll_the_dice(1)
     char.delete_lucky(dice1)
     dice1 = roll_the_dice(1)
     char.delete_lucky(dice1)
+
+    print(f"Отлично! персонаж создан!")
     save_character(user_id, char, char_inventory)
+    return char,char_inventory
 
 
 def check_char_in_base(user_id):
@@ -200,41 +183,55 @@ def save_character_to_base(user_id, char):
 def save_inventory_to_base(user_id, char_inventory):
     inventory_to_base = check_inventory_in_base(user_id)
     if inventory_to_base is None:
-        inventory_to_base=CharacterInventoryModel()
-    inventory_to_base.user_id= char_inventory.user_id
-    inventory_to_base.slots =char_inventory.slots
-    if char_inventory.item1 is not None:
-        inventory_to_base.item1 ={"item_id":char_inventory.item1.item_id, "name":char_inventory.item1.name, "count":char_inventory.item1.count}
-    if char_inventory.item2 is not None:
-        inventory_to_base.item2 ={"item_id":char_inventory.item2.item_id, "name":char_inventory.item2.name, "count":char_inventory.item2.count}
-    if char_inventory.item3 is not None:
-        inventory_to_base.item3 ={"item_id":char_inventory.item3.item_id, "name":char_inventory.item3.name, "count":char_inventory.item3.count}
-    if char_inventory.item4 is not None:
-        inventory_to_base.item4 ={"item_id":char_inventory.item4.item_id, "name":char_inventory.item4.name, "count":char_inventory.item4.count}
-    if char_inventory.item5 is not None:
-        inventory_to_base.item5 ={"item_id":char_inventory.item5.item_id, "name":char_inventory.item5.name, "count":char_inventory.item5.count}
-    if char_inventory.item6 is not None:
-        inventory_to_base.item6 ={"item_id":char_inventory.item6.item_id, "name":char_inventory.item6.name, "count":char_inventory.item6.count}
-    if char_inventory.item7 is not None:
-        inventory_to_base.item7 ={"item_id":char_inventory.item7.item_id, "name":char_inventory.item7.name, "count":char_inventory.item7.count}
-    if char_inventory.item8 is not None:
-        inventory_to_base.item8 ={"item_id":char_inventory.item8.item_id, "name":char_inventory.item8.name, "count":char_inventory.item8.count}
-    if char_inventory.item9 is not None:
-        inventory_to_base.item9 ={"item_id":char_inventory.item9.item_id, "name":char_inventory.item9.name, "count":char_inventory.item9.count}
+        inventory_to_base = CharacterInventoryModel()
+    inventory_to_base.user_id = char_inventory.user_id
+    inventory_to_base.slots = char_inventory.slots
+    char_inventory_json={}
+    for item in char_inventory.char_items:
+        if char_inventory.char_items[item] is not None:
+            char_inventory_json.update({item: {"item_id": char_inventory.char_items[item].item_id,
+                                               "count": char_inventory.char_items[item].count}})
+        else:
+            char_inventory_json.update({item:None})
+    inventory_to_base.char_items=json.dumps(char_inventory_json)
     inventory_to_base.save()
+
 
 def save_character(user_id, char, char_inventory):
     save_character_to_base(user_id, char)
     save_inventory_to_base(user_id, char_inventory)
 
-
+def load_character(user_id):
+    char_from_base = check_char_in_base(user_id)
+    character = Game_Character(name=char_from_base.character_name,
+                               max_agility=char_from_base.max_agility,
+                               current_agility=char_from_base.current_agility,
+                               max_strange=char_from_base.max_strange,
+                               current_strange=char_from_base.current_strange,
+                               max_charm=char_from_base.max_charm,
+                               current_charm=char_from_base.current_charm,
+                               lucky=char_from_base.lucky)
+    inventory_from_base = check_inventory_in_base(user_id)
+    char_inventory = Character_Inventory(user_id)
+    char_inventory.slots=inventory_from_base.slots
+    load_items = json.loads(inventory_from_base.char_items.replace("'", '"'))
+    for item in load_items:
+        if load_items[item] is not None:
+            bd_item = GameItemsModel.get(id=load_items[item]['item_id'])
+            item = Game_Items(bd_item.id, bd_item.name, count=load_items[item]['count'])
+            char_inventory.add_item(item)
+    print(f"Отлично! персонаж Загружен!")
+    return character,char_inventory
 
 def load_items():
     try:
         with open('game_items.json', 'r', encoding='utf-8') as file:
             items = json.load(file)
         for item in items:
-            GameItemsModel.create(name=item)
+            try:
+                GameItemsModel.create(name=item)
+            except:
+                pass
     except:
         pass
 
@@ -245,4 +242,15 @@ if __name__ == '__main__':
     GameItemsModel.create_table()
     load_items()
     print("Шаг первый. создать персонаж + инвентарь.")
-    create_character()
+    # char, char_inventory = create_character()
+    char, char_inventory = load_character(user_id)
+    print(f"Имя:{char.name}\n"
+          f"Ловкость:{char.max_agility}\n"
+          f"Сила:{char.max_strange}\n"
+          f"Харизма:{char.max_charm}\n"
+          f"Удача:{char.lucky}\n")
+    print(f"инвентарь:")
+    for item in char_inventory.char_items:
+        if char_inventory.char_items[item] is not None:
+            print(char_inventory.char_items[item].item_id, char_inventory.char_items[item].name,
+                  char_inventory.char_items[item].count)
