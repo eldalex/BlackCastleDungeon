@@ -24,15 +24,32 @@ class GameCharacterModel(BaseModel):
 
 
 class CharacterInventoryModel(BaseModel):
-    user_id =ForeignKeyField(GameCharacterModel, null=False,unique=True)
+    user_id = ForeignKeyField(GameCharacterModel, null=False, unique=True)
     slots = IntegerField(column_name='SlotsOfBackpack', null=False)
     char_items = TextField(column_name='CharItems', null=True)
 
     class Meta:
         table_name = 'Inventory_Characters'
 
+
 class GameItemsModel(BaseModel):
     name = TextField(column_name='Name', null=False, unique=True)
+    paragraph = IntegerField(column_name='Paragraph', null=False, unique=True, default=0)
 
     class Meta:
-        table_name = 'Game_items'
+        table_name = 'Game_Items'
+
+
+class GameEnemysModel(BaseModel):
+    name = TextField(column_name='Name', null=False, unique=True)
+    nameRU = TextField(column_name='NameRus', null=False)
+    paragraph = IntegerField(column_name='Paragraph', null=False)
+    agility = TextField(column_name='Agility', null=False)
+    strange = TextField(column_name='Strange', null=False)
+    in_battle = IntegerField(column_name='In_Battle', null=False)
+    ater_death = IntegerField(column_name='Ater_Death', null=False)
+    delay = IntegerField(column_name='Delay', null=False)
+    loyalty = TextField(column_name='Loyalty', null=False)
+
+    class Meta:
+        table_name = 'Game_Enemys'

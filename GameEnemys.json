@@ -1,0 +1,632 @@
+{
+  "goblin_33": {
+    "nameRU": "Гоблин",
+    "paragraph": 33,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":1,
+	"delay":0,
+	"loyalty": 6
+  },
+  "ork_33": {
+    "nameRU": "Орк",
+    "paragraph": 33,
+    "agility": 9,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "goblin_40_1": {
+    "nameRU": "Первый гоблин",
+    "paragraph": 40,
+    "agility": 7,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 12
+  },
+  "goblin_40_2": {
+    "nameRU": "Второй гоблин",
+    "paragraph": 40,
+    "agility": 7,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 8
+  },
+  "goblin_102": {
+    "nameRU": "Гоблин",
+    "paragraph": 102,
+    "agility": 8,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 11
+  },
+  "goblin_192": {
+    "nameRU": "Гоблин",
+    "paragraph": 192,
+    "agility": 7,
+    "strange": 9,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 12
+  },
+  "goblin_290": {
+    "nameRU": "Гоблин",
+    "paragraph": 290,
+    "agility": 7,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 8
+  },
+  "goblin_532_1": {
+    "nameRU": "Первый гоблин",
+    "paragraph": 532,
+    "agility": 8,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "goblin_532_2": {
+    "nameRU": "Второй гоблин",
+    "paragraph": 532,
+    "agility": 6,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "goblin_539_1": {
+    "nameRU": "Первый гоблин",
+    "paragraph": 539,
+    "agility": 4,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "goblin_539_2": {
+    "nameRU": "Второй гоблин",
+    "paragraph": 539,
+    "agility": 8,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":1,
+	"delay":0,
+	"loyalty": 999
+  },
+  "woodcutter_6_1": {
+    "nameRU": "Первый дровосек",
+    "paragraph": 6,
+    "agility": 8,
+    "strange": 4,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "woodcutter_6_2": {
+    "nameRU": "Второй дровосек",
+    "paragraph": 6,
+    "agility": 6,
+    "strange": 7,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "bat_16_1": {
+    "nameRU": "Первая летучая мышь",
+    "paragraph": 16,
+    "agility": 10,
+    "strange": 4,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "bat_16_2": {
+    "nameRU": "Вторая летучая мышь",
+    "paragraph": 16,
+    "agility": 8,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "bat_16_3": {
+    "nameRU": "Третья летучая мышь",
+    "paragraph": 16,
+    "agility": 8,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "dragon_37": {
+    "nameRU": "Дракон",
+    "paragraph": 37,
+    "agility": 10,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "dragon_41": {
+    "nameRU": "Дракон",
+    "paragraph": 41,
+    "agility": 10,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "guard_boss_65": {
+    "nameRU": "Начальник стражи",
+    "paragraph": 65,
+    "agility": 9,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "vampire_woman_93": {
+    "nameRU": "Женщина вампир",
+    "paragraph": 93,
+    "agility": 11,
+    "strange": 14,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "green_knigth_112": {
+    "nameRU": "ЗЕЛЕНЫЙ РЫЦАРЬ",
+    "paragraph": 112,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "robber_123_1": {
+    "nameRU": "Первый разбойник",
+    "paragraph": 123,
+    "agility": 9,
+    "strange": 4,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "robber_123_2": {
+    "nameRU": "Второй разбойник",
+    "paragraph": 123,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "robber_123_3": {
+    "nameRU": "Третий разбойник",
+    "paragraph": 123,
+    "agility": 6,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "green_knigth_183_1": {
+    "nameRU": "Первый зелёный рыцарь",
+    "paragraph": 183,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "green_knigth_183_2": {
+    "nameRU": "Второй зелёный рыцарь",
+    "paragraph": 183,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "monkey_215": {
+    "nameRU": "Обезьяна",
+    "paragraph": 215,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ghost_243": {
+    "nameRU": "Призрак",
+    "paragraph": 243,
+    "agility": 10,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "spirit_247": {
+    "nameRU": "Дух мертвых",
+    "paragraph": 247,
+    "agility": 10,
+    "strange": 12,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "lion_257": {
+    "nameRU": "Лев",
+    "paragraph": 257,
+    "agility": 9,
+    "strange": 14,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "hyena_264": {
+    "nameRU": "Гиена",
+    "paragraph": 264,
+    "agility": 8,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "green_knigth_309": {
+    "nameRU": "Зелёный рыцарь",
+    "paragraph": 309,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "dragon_316": {
+    "nameRU": "Дракон",
+    "paragraph": 316,
+    "agility": 12,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "watter_man_326": {
+    "nameRU": "Водяной",
+    "paragraph": 326,
+    "agility": 9,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ork_328_1": {
+    "nameRU": "Первый орк",
+    "paragraph": 328,
+    "agility": 8,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ork_328_2": {
+    "nameRU": "Второй орк",
+    "paragraph": 328,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "troll_356": {
+    "nameRU": "Тролль",
+    "paragraph": 356,
+    "agility": 9,
+    "strange": 14,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "man_374_1": {
+    "nameRU": "Первый человек",
+    "paragraph": 374,
+    "agility": 8,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "man_374_2": {
+    "nameRU": "Второй человек",
+    "paragraph": 374,
+    "agility": 6,
+    "strange": 12,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "barlad_dert_483": {
+    "nameRU": "Барлад Дэрт",
+    "paragraph": 483,
+    "agility": 14,
+    "strange": 12,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ork_487_1": {
+    "nameRU": "Первый орк",
+    "paragraph": 487,
+    "agility": 10,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ork_487_2": {
+    "nameRU": "Второй орк",
+    "paragraph": 487,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 10
+  },
+  "ork_487_3": {
+    "nameRU": "Третий орк",
+    "paragraph": 487,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 10
+  },
+  "ork_499": {
+    "nameRU": "Орк",
+    "paragraph": 499,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "trader_518": {
+    "nameRU": "Торговец",
+    "paragraph": 518,
+    "agility": 6,
+    "strange": 12,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "werewolf_528": {
+    "nameRU": "Оборотень",
+    "paragraph": 528,
+    "agility": 9,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "bear_529": {
+    "nameRU": "Медведица",
+    "paragraph": 529,
+    "agility": 8,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "green_knigth_543": {
+    "nameRU": "Зелёный рыцарь",
+    "paragraph": 543,
+    "agility": 11,
+    "strange": 14,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "garpy_553": {
+    "nameRU": "Гарпия",
+    "paragraph": 553,
+    "agility": 10,
+    "strange": 12,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "spider_558": {
+    "nameRU": "Гиганский паук",
+    "paragraph": 558,
+    "agility": 8,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "woodman_563": {
+    "nameRU": "Лесовичок",
+    "paragraph": 563,
+    "agility": 6,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "green_knigth_567": {
+    "nameRU": "Зелёный рыцарь",
+    "paragraph": 567,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "cook_604": {
+    "nameRU": "Повар",
+    "paragraph": 604,
+    "agility": 8,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 12
+  },
+  "spider_606": {
+    "nameRU": "Паук",
+    "paragraph": 606,
+    "agility": 8,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "spider_618": {
+    "nameRU": "Гиганский паук",
+    "paragraph": 618,
+    "agility": 9,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "knight_628_1": {
+    "nameRU": "Первый рыцарь",
+    "paragraph": 628,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "knight_628_2": {
+    "nameRU": "Второй рыцарь",
+    "paragraph": 628,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "knight_628_3": {
+    "nameRU": "Третий рыцарь",
+    "paragraph": 628,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":6,
+	"loyalty": 999
+  },
+  "knight_628_4": {
+    "nameRU": "Капитан рыцарей",
+    "paragraph": 628,
+    "agility": 12,
+    "strange": 14,
+	"in_battle":0,
+	"ater_death":2,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ork_647_1": {
+    "nameRU": "Первый орк",
+    "paragraph": 647,
+    "agility": 9,
+    "strange": 6,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  },
+  "ork_647_2": {
+    "nameRU": "Второй орк",
+    "paragraph": 647,
+    "agility": 8,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":3,
+	"loyalty": 999
+  },
+  "ork_647_3": {
+    "nameRU": "Третий орк",
+    "paragraph": 647,
+    "agility": 7,
+    "strange": 8,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":3,
+	"loyalty": 999
+  },
+  "monkey_651": {
+    "nameRU": "Обезьяна",
+    "paragraph": 651,
+    "agility": 10,
+    "strange": 10,
+	"in_battle":0,
+	"ater_death":0,
+	"delay":0,
+	"loyalty": 999
+  }
+}
