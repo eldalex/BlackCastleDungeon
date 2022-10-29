@@ -18,13 +18,50 @@ start_stats = {2: {"agility": 8, "strange": 22, "charm": 8},
                12: {"agility": 11, "strange": 20, "charm": 5}}
 
 
+class Game_Spell_Book:
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.spells = {"cell1": None,
+                       "cell2": None,
+                       "cell3": None,
+                       "cell4": None,
+                       "cell5": None,
+                       "cell6": None,
+                       "cell7": None,
+                       "cell8": None,
+                       "cell9": None,
+                       "cell10": None}
+
+    def add_spell(self, spell):
+        for cell in self.spells:
+            if self.spells[cell] == None:
+                self.spells[cell] = spell
+                break
+
+    def check_free_cell(self):
+        free = True
+        for cell in self.spells:
+            if self.spells[cell] is None:
+                free = False
+                break
+        return free
+
+
+class Game_Spell:
+    def __init__(self, spell_from_bd):
+        self.id = spell_from_bd.id
+        self.name = spell_from_bd.name
+        self.description = spell_from_bd.description
+
+
 class Game_Battle:
-    def __init__(self, char, list_enemy):
+    def __init__(self, char, list_enemy,special_condition=None):
         self.char = char
         self.list_enemy = list_enemy
         self.char_winner = None
         self.round = 1
         self.count_parry = 0
+        self.special_condition=special_condition
 
     def check_dead_or_alive(self):
         self.dead_alive = []
@@ -258,7 +295,7 @@ def roll_the_dice(count):
         return dice1
 
 
-def create_character():
+def setup_char():
     print('Крутим кубы')
     dice1, dice2 = roll_the_dice(2)
     summa = dice1 + dice2
@@ -270,18 +307,52 @@ def create_character():
                           current_strange=start_stats[summa]['strange'],
                           max_charm=start_stats[summa]['charm'],
                           current_charm=start_stats[summa]['charm'])
+    dice1 = roll_the_dice(1)
+    char.delete_lucky(dice1)
+    dice1 = roll_the_dice(1)
+    char.delete_lucky(dice1)
+    return char
+
+
+def setup_inventory(user_id):
     char_inventory = Character_Inventory(user_id)
     bd_item = GameItemsModel.get(id=1)
     item = Game_Items(bd_item.id, bd_item.name, count=3, paragraph=bd_item.paragraph)
     char_inventory.add_item(item)
-    dice1 = roll_the_dice(1)
-    char.delete_lucky(dice1)
-    dice1 = roll_the_dice(1)
-    char.delete_lucky(dice1)
+    bd_item = GameItemsModel.get(id=2)
+    item = Game_Items(bd_item.id, bd_item.name, count=15, paragraph=bd_item.paragraph)
+    char_inventory.add_item(item)
+    bd_item = GameItemsModel.get(id=3)
+    item = Game_Items(bd_item.id, bd_item.name, count=2, paragraph=bd_item.paragraph)
+    char_inventory.add_item(item)
+    return char_inventory
 
+
+def setup_spell_book(user_id):
+    book = Game_Spell_Book(user_id)
+    print(f"Выбери 10 заклинаний(можно повторяться)!")
+    base_spells = GameSpellsModel.select()
+    for item in base_spells:
+        print(f"{item.id}) '{item.name}': {item.description}")
+    while not book.check_free_cell():
+        correct_num = False
+        while not correct_num:
+            nubber_of_spell = int(input())
+            if nubber_of_spell in range(1, len(GameSpellsModel.select()) + 1):
+                correct_num = True
+        spell = Game_Spell(GameSpellsModel.select().where(GameSpellsModel.id == nubber_of_spell).get())
+        book.add_spell(spell)
+        print(f"{spell.name} добавлен в книгу")
+    return book
+
+
+def create_character():
+    char = setup_char()
+    char_inventory = setup_inventory(user_id)
+    char_spell_book = setup_spell_book(user_id)
     print(f"Отлично! персонаж создан!")
-    save_character(user_id, char, char_inventory)
-    return char, char_inventory
+    save_character(user_id, char, char_inventory, char_spell_book)
+    return char, char_inventory , char_spell_book
 
 
 def check_char_in_base(user_id):
@@ -293,9 +364,18 @@ def check_char_in_base(user_id):
         return char
 
 
+def check_book_in_base(user_id):
+    try:
+        spell_book = GameCharacterSpellBookModel.get(GameCharacterSpellBookModel.user_id == user_id)
+    except DoesNotExist:
+        spell_book = None
+    finally:
+        return spell_book
+
+
 def check_inventory_in_base(user_id):
     try:
-        inventory = CharacterInventoryModel.get(CharacterInventoryModel.user_id == user_id)
+        inventory = GameCharacterInventoryModel.get(GameCharacterInventoryModel.user_id == user_id)
     except DoesNotExist:
         inventory = None
     finally:
@@ -318,10 +398,29 @@ def save_character_to_base(user_id, char):
     chartobase.save()
 
 
+def save_char_spell_book_to_base(user_id, char_spell_book):
+    spell_book_to_base = check_book_in_base(user_id)
+    if spell_book_to_base is None:
+        spell_book_to_base = GameCharacterSpellBookModel()
+    spell_book_to_base.user_id = char_spell_book.user_id
+    char_spell_book_json = {}
+    for spell in char_spell_book.spells:
+        if char_spell_book.spells[spell] is not None:
+            char_spell_book_json.update({spell: {
+                "id": char_spell_book.spells[spell].id,
+                "name": char_spell_book.spells[spell].name,
+                "description": char_spell_book.spells[spell].description
+            }})
+        else:
+            char_spell_book_json.update({spell:None})
+    spell_book_to_base.spells = json.dumps(char_spell_book_json, ensure_ascii=False)
+    spell_book_to_base.save()
+
+
 def save_inventory_to_base(user_id, char_inventory):
     inventory_to_base = check_inventory_in_base(user_id)
     if inventory_to_base is None:
-        inventory_to_base = CharacterInventoryModel()
+        inventory_to_base = GameCharacterInventoryModel()
     inventory_to_base.user_id = char_inventory.user_id
     inventory_to_base.slots = char_inventory.slots
     char_inventory_json = {}
@@ -335,9 +434,10 @@ def save_inventory_to_base(user_id, char_inventory):
     inventory_to_base.save()
 
 
-def save_character(user_id, char, char_inventory):
+def save_character(user_id, char, char_inventory, char_spell_book):
     save_character_to_base(user_id, char)
     save_inventory_to_base(user_id, char_inventory)
+    save_char_spell_book_to_base(user_id, char_spell_book)
 
 
 def load_character(user_id):
@@ -353,14 +453,19 @@ def load_character(user_id):
     inventory_from_base = check_inventory_in_base(user_id)
     char_inventory = Character_Inventory(user_id)
     char_inventory.slots = inventory_from_base.slots
-    load_items = json.loads(inventory_from_base.char_items.replace("'", '"'))
+    load_items = json.loads(inventory_from_base.char_items)
     for item in load_items:
         if load_items[item] is not None:
             bd_item = GameItemsModel.get(id=load_items[item]['item_id'])
             item = Game_Items(bd_item.id, bd_item.name, count=load_items[item]['count'])
             char_inventory.add_item(item)
+    load_spell_book = json.loads(GameCharacterSpellBookModel.get(user_id=user_id).spells)
+    char_spell_book = Game_Spell_Book(user_id)
+    for cell in load_spell_book:
+        spell = Game_Spell(GameSpellsModel.select().where(GameSpellsModel.id == load_spell_book[cell]['id']).get())
+        char_spell_book.add_spell(spell)
     print(f"Отлично! персонаж Загружен!")
-    return character, char_inventory
+    return character, char_inventory, char_spell_book
 
 
 def load_items():
@@ -370,7 +475,21 @@ def load_items():
         for item in items:
             try:
                 GameItemsModel.create(name=item)
-            except:
+            except Exception as e:
+                pass
+    except:
+        pass
+
+
+def load_spell():
+    try:
+        with open('game_spells.json', 'r', encoding='utf-8') as file:
+            items = json.load(file)
+        for item in items:
+            try:
+                GameSpellsModel.create(name=item["name"],
+                                       description=item["description"])
+            except Exception as e:
                 pass
     except:
         pass
@@ -410,14 +529,17 @@ def check_is_alive(list_enemys):
 
 if __name__ == '__main__':
     GameCharacterModel.create_table()
-    CharacterInventoryModel.create_table()
+    GameCharacterInventoryModel.create_table()
     GameItemsModel.create_table()
     GameEnemysModel.create_table()
+    GameSpellsModel.create_table()
+    GameCharacterSpellBookModel.create_table()
     load_items()
     load_enemys()
+    load_spell()
     print("Шаг первый. создать персонаж + инвентарь.")
-    # char, char_inventory = create_character()
-    char, char_inventory = load_character(user_id)
+    # char, char_inventory, char_spell_book = create_character()
+    char, char_inventory, char_spell_book = load_character(user_id)
     print(f"Имя:{char.name}\n"
           f"Ловкость:{char.max_agility}\n"
           f"Сила:{char.max_strange}\n"

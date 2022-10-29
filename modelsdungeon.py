@@ -23,7 +23,7 @@ class GameCharacterModel(BaseModel):
         table_name = 'Game_Characters'
 
 
-class CharacterInventoryModel(BaseModel):
+class GameCharacterInventoryModel(BaseModel):
     user_id = ForeignKeyField(GameCharacterModel, null=False, unique=True)
     slots = IntegerField(column_name='SlotsOfBackpack', null=False)
     char_items = TextField(column_name='CharItems', null=True)
@@ -32,12 +32,28 @@ class CharacterInventoryModel(BaseModel):
         table_name = 'Inventory_Characters'
 
 
+class GameCharacterSpellBookModel(BaseModel):
+    user_id = ForeignKeyField(GameCharacterModel, null=False, unique=True)
+    spells = TextField(column_name='Spells', null=True)
+
+    class Meta:
+        table_name = 'Game_Character_Spell_Book'
+
+
 class GameItemsModel(BaseModel):
     name = TextField(column_name='Name', null=False, unique=True)
-    paragraph = IntegerField(column_name='Paragraph', null=False, unique=True, default=0)
+    paragraph = IntegerField(column_name='Paragraph', null=False, default=0)
 
     class Meta:
         table_name = 'Game_Items'
+
+
+class GameSpellsModel(BaseModel):
+    name = TextField(column_name='Name', null=False, unique=True)
+    description = TextField(column_name='Description', null=False)
+
+    class Meta:
+        table_name = 'Game_Spells'
 
 
 class GameEnemysModel(BaseModel):
