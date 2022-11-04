@@ -11,13 +11,13 @@ class BaseModel(Model):
 class GameCharacterModel(BaseModel):
     user_id = IntegerField(column_name='UserID', null=False, unique=True)
     character_name = TextField(column_name='Name', null=False)
-    max_agility = IntegerField(column_name='MaxAgility', null=False)
-    current_agility = IntegerField(column_name='CurrentAgility', null=False)
-    max_strange = IntegerField(column_name='MaxStrange', null=False)
-    current_strange = IntegerField(column_name='CurrentStrange', null=False)
-    max_charm = IntegerField(column_name='MaxCharm', null=False)
-    current_charm = IntegerField(column_name='CurrentCharm', null=False)
-    lucky = TextField(column_name='lucky', null=False)
+    max_skill = IntegerField(column_name='MaxSkill', null=False)
+    current_skill = IntegerField(column_name='CurrentSkill', null=False)
+    max_stamina = IntegerField(column_name='MaxStamina', null=False)
+    current_stamina = IntegerField(column_name='CurrentStamina', null=False)
+    lucky = IntegerField(column_name='Lucky', null=False)
+    state = IntegerField(column_name='State', null=False)
+    paragraphs = TextField(column_name='Paragraphs', null=False)
 
     class Meta:
         table_name = 'Game_Characters'
@@ -41,7 +41,8 @@ class GameCharacterSpellBookModel(BaseModel):
 
 
 class GameItemsModel(BaseModel):
-    name = TextField(column_name='Name', null=False, unique=True)
+    item_id = IntegerField(column_name='Item_id', null=False)
+    item_name = TextField(column_name='Item_Name', null=False, unique=True)
     paragraph = IntegerField(column_name='Paragraph', null=False, default=0)
 
     class Meta:

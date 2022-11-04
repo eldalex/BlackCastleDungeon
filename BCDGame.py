@@ -1,21 +1,39 @@
-import random
+from dice import roll_the_dice
 import json
 import peewee
 from peewee import *
 from modelsdungeon import *
 
 user_id = 1606686846
-start_stats = {2: {"agility": 8, "strange": 22, "charm": 8},
-               3: {"agility": 10, "strange": 20, "charm": 6},
-               4: {"agility": 12, "strange": 6, "charm": 5},
-               5: {"agility": 9, "strange": 8, "charm": 18},
-               6: {"agility": 11, "strange": 20, "charm": 6},
-               7: {"agility": 9, "strange": 20, "charm": 7},
-               8: {"agility": 10, "strange": 16, "charm": 7},
-               9: {"agility": 8, "strange": 24, "charm": 7},
-               10: {"agility": 9, "strange": 22, "charm": 6},
-               11: {"agility": 10, "strange": 18, "charm": 7},
-               12: {"agility": 11, "strange": 20, "charm": 5}}
+
+
+class Scene:
+    def __init__(self, paragrph_id, paragraphs):
+        self.paragrph_id = str(paragrph_id)
+        self.paragraphs = paragraphs
+        self.prepare_scene()
+        self.prepare_env_items()
+        self.prepare_enemy()
+        self.prepare_cross()
+
+    def prepare_enemy(self):
+        self.list_enemys = []
+        enemys_from_bd = GameEnemysModel.select().where(GameEnemysModel.paragraph == self.paragrph_id)
+        for enemy in enemys_from_bd:
+            self.list_enemys.append(Enemy(enemy))
+
+    def prepare_env_items(self):
+        self.list_items = []
+        for i in self.paragraphs[self.paragrph_id]["items"]:
+            bd_item = GameItemsModel.get(id=i["id"])
+            item = Game_Items(bd_item.item_id, bd_item.item_name, count=i["count"], paragraph=bd_item.paragraph)
+            self.list_items.append(item)
+
+    def prepare_scene(self):
+        self.description = self.paragraphs[self.paragrph_id]["content"]
+
+    def prepare_cross(self):
+        self.crossing = self.paragraphs[self.paragrph_id]["crossing"]
 
 
 class TheGame:
@@ -63,7 +81,9 @@ class TheGame:
                 items = json.load(file)
             for item in items:
                 try:
-                    GameItemsModel.create(name=item)
+                    GameItemsModel.create(
+                        item_id=items[item]["item_id"],
+                        item_name=items[item]["item_name"])
                 except Exception as e:
                     pass
         except:
@@ -107,6 +127,7 @@ class TheGame:
         self.setup_char()
         self.setup_inventory()
         self.setup_spell_book()
+        self.setup_paragraphs()
         print(f"Отлично! персонаж создан!")
         self.save_character()
 
@@ -116,13 +137,13 @@ class TheGame:
             chartobase = GameCharacterModel()
         chartobase.user_id = self.user_id
         chartobase.character_name = self.char.name
-        chartobase.max_agility = self.char.max_agility
-        chartobase.current_agility = self.char.current_agility
-        chartobase.max_strange = self.char.max_strange
-        chartobase.current_strange = self.char.current_strange
-        chartobase.max_charm = self.char.max_charm
-        chartobase.current_charm = self.char.current_charm
+        chartobase.max_skill = self.char.max_skill
+        chartobase.current_skill = self.char.current_skill
+        chartobase.max_stamina = self.char.max_stamina
+        chartobase.current_stamina = self.char.current_stamina
         chartobase.lucky = self.char.lucky
+        chartobase.state = self.state
+        chartobase.paragraphs = json.dumps(self.parapraphs, ensure_ascii=False)
         chartobase.save()
 
     def save_char_spell_book_to_base(self):
@@ -164,35 +185,35 @@ class TheGame:
         self.save_inventory_to_base()
         self.save_char_spell_book_to_base()
 
+
     def setup_inventory(self):
         self.char_inventory = Character_Inventory(self.user_id)
-        bd_item = GameItemsModel.get(id=1)
-        item = Game_Items(bd_item.id, bd_item.name, count=3, paragraph=bd_item.paragraph)
-        self.char_inventory.add_item(item)
         bd_item = GameItemsModel.get(id=2)
-        item = Game_Items(bd_item.id, bd_item.name, count=15, paragraph=bd_item.paragraph)
+        item = Game_Items(bd_item.item_id, bd_item.item_name, count=3, paragraph=bd_item.paragraph)
+        self.char_inventory.add_item(item)
+        bd_item = GameItemsModel.get(id=1)
+        item = Game_Items(bd_item.item_id, bd_item.item_name, count=15, paragraph=bd_item.paragraph)
         self.char_inventory.add_item(item)
         bd_item = GameItemsModel.get(id=3)
-        item = Game_Items(bd_item.id, bd_item.name, count=2, paragraph=bd_item.paragraph)
+        item = Game_Items(bd_item.item_id, bd_item.item_name, count=2, paragraph=bd_item.paragraph)
         self.char_inventory.add_item(item)
-
 
     def setup_char(self):
         print('Крутим кубы')
+        skill = roll_the_dice(1) + 6
         dice1, dice2 = roll_the_dice(2)
-        summa = dice1 + dice2
-        print(f'Кубик1:{dice1}, Кубик2:{dice2}')
+        stamina = dice1 + dice2 + 12
+        luck = roll_the_dice(1) + 6
         self.char = Game_Character(name='Alex',
-                              max_agility=start_stats[summa]['agility'],
-                              current_agility=start_stats[summa]['agility'],
-                              max_strange=start_stats[summa]['strange'],
-                              current_strange=start_stats[summa]['strange'],
-                              max_charm=start_stats[summa]['charm'],
-                              current_charm=start_stats[summa]['charm'])
-        dice1 = roll_the_dice(1)
-        self.char.delete_lucky(dice1)
-        dice1 = roll_the_dice(1)
-        self.char.delete_lucky(dice1)
+                                   max_skill=skill,
+                                   current_skill=skill,
+                                   max_stamina=stamina,
+                                   current_stamina=stamina,
+                                   lucky=luck)
+    def setup_paragraphs(self):
+        self.state=1
+        with open('game_parafraphs.json', 'r', encoding='utf-8') as file:
+            self.parapraphs = json.load(file)
 
     def setup_spell_book(self):
         self.char_spell_book = Game_Spell_Book(self.user_id)
@@ -213,13 +234,13 @@ class TheGame:
     def load_character(self):
         char_from_base = self.check_char_in_base()
         self.char = Game_Character(name=char_from_base.character_name,
-                                   max_agility=char_from_base.max_agility,
-                                   current_agility=char_from_base.current_agility,
-                                   max_strange=char_from_base.max_strange,
-                                   current_strange=char_from_base.current_strange,
-                                   max_charm=char_from_base.max_charm,
-                                   current_charm=char_from_base.current_charm,
+                                   max_skill=char_from_base.max_skill,
+                                   current_skill=char_from_base.current_skill,
+                                   max_stamina=char_from_base.max_stamina,
+                                   current_stamina=char_from_base.current_stamina,
                                    lucky=char_from_base.lucky)
+        self.state=char_from_base.state
+        self.parapraphs=json.loads(char_from_base.paragraphs)
         inventory_from_base = self.check_inventory_in_base()
         self.char_inventory = Character_Inventory(self.user_id)
         self.char_inventory.slots = inventory_from_base.slots
@@ -227,7 +248,7 @@ class TheGame:
         for item in load_items:
             if load_items[item] is not None:
                 bd_item = GameItemsModel.get(id=load_items[item]['item_id'])
-                item = Game_Items(bd_item.id, bd_item.name, count=load_items[item]['count'])
+                item = Game_Items(bd_item.item_id, bd_item.item_name, count=load_items[item]['count'])
                 self.char_inventory.add_item(item)
         load_spell_book = json.loads(GameCharacterSpellBookModel.get(user_id=user_id).spells)
         self.char_spell_book = Game_Spell_Book(self.user_id)
@@ -341,7 +362,7 @@ class Game_Battle:
             print(f"Раунд: {self.round}")
             self.char.calculate_power_punch()
             print(
-                f"ТЫ: {self.char.name}; ловкость:{self.char.current_agility}; сила:{self.char.current_strange}; мощность в раунде:{self.char.power_punch}")
+                f"ТЫ: {self.char.name}; ловкость:{self.char.current_skill}; сила:{self.char.current_stamina}; мощность в раунде:{self.char.power_punch}")
             for enemy in self.battle_mobs:
                 enemy.calculate_power_punch()
                 print(
@@ -375,7 +396,7 @@ class Enemy:
         self.id = bd_enemy.id
         self.name = bd_enemy.name
         self.nameRU = bd_enemy.nameRU
-        self.paragraph = int(bd_enemy.paragraph)
+        self.paragraph = int(bd_enemy.action)
         self.agility = int(bd_enemy.agility)
         self.strange = int(bd_enemy.strange)
         self.delay = int(bd_enemy.delay)
@@ -469,59 +490,99 @@ class Character_Inventory:
 
 
 class Game_Character:
-    def __init__(self, name, max_agility, current_agility, max_strange, current_strange, max_charm, current_charm,
-                 lucky=[1, 2, 3, 4, 5, 6]):
+    def __init__(self, name, max_skill, current_skill, max_stamina, current_stamina, lucky):
         self.name = name
-        self.max_agility = int(max_agility)
-        self.current_agility = int(current_agility)
-        self.max_strange = int(max_strange)
-        self.current_strange = int(current_strange)
-        self.max_charm = int(max_charm)
-        self.current_charm = int(current_charm)
+        self.max_skill = int(max_skill)
+        self.current_skill = int(current_skill)
+        self.max_stamina = int(max_stamina)
+        self.current_stamina = int(current_stamina)
         self.lucky = lucky
         self.sword = 0
         self.power_punch = None
         self.is_alive = True
 
-    def delete_lucky(self, dice):
+    def delete_lucky(self):
         try:
-            self.lucky.remove(dice)
+            self.lucky -= 1
+        except ValueError:
+            pass
+
+    def add_lucky(self):
+        try:
+            self.lucky += 1
         except ValueError:
             pass
 
     def get_hurt(self, modifikator=0):
-        self.current_strange -= 2 + modifikator
-        if self.current_strange <= 0:
+        self.current_stamina -= 2 + modifikator
+        if self.current_stamina <= 0:
             self.is_alive = False
 
     def eat_and_heal(self, heal=4):
-        if self.current_strange + heal <= self.max_strange:
-            self.current_strange += heal
+        if self.current_stamina + heal <= self.max_stamina:
+            self.current_stamina += heal
         else:
-            self.current_strange = self.max_strange
+            self.current_stamina = self.max_stamina
 
-    def calculate_power_punch(self):
+    def calculate_power_punch(self, modifikator=0):
         dice = roll_the_dice(1)
-        self.power_punch = dice * 2 + int(self.current_agility)
+        self.power_punch = dice * 2 + int(self.current_skill) + modifikator
 
 
-def roll_the_dice(count):
-    dice1 = random.randrange(1, 7)
-    dice2 = random.randrange(1, 7)
-    if count == 2:
-        return dice1, dice2
-    if count == 1:
-        return dice1
+def print_description(desc):
+    max_count = 20
+    de = desc.split(' ')
+    count = 0
+    for i in de:
+        if count == max_count:
+            print(i + '\n', end='')
+            count = 0
+        elif count == 0:
+            print(i.strip(), end=' ')
+            count += 1
+        else:
+            print(i, end=' ')
+            count += 1
 
 
-def check_is_alive(list_enemys):
-    check_list = []
-    for enemy in list_enemys:
-        check_list.append(enemy.is_alive)
-    if any(check_list):
-        return True
+def get_information_about_char(char):
+    print(f"Имя:{char.name}\n"
+          f"Мастерство:{char.max_skill}\n"
+          f"Выносливость:{char.max_stamina}\n"
+          f"Удача:{char.lucky}\n"
+          f"Меч:{char.sword}\n")
+
+
+def get_information_about_inventory(char_inventory):
+    print(f"инвентарь:")
+    for item in char_inventory.char_items:
+        if char_inventory.char_items[item] is not None:
+            print(char_inventory.char_items[item].item_id,
+                  char_inventory.char_items[item].name,
+                  char_inventory.char_items[item].count)
+
+
+def get_information_about_env_items(list_items):
+    if len(list_items)==0:
+        print('Вы не видите предметов, которые могли бы положить к себе в мешок')
     else:
-        return False
+        print(f"Вы оглядываетесь еще раз и видите следущие предметы:")
+        for item in list_items:
+            if item.count>1:
+                print(f"{item.name}, в количестве: {item.count} шт.")
+            else:
+                print(f"{item.name}")
+
+def get_env_item(list_items,char_inventory,paragrapsh,id):
+    print(f"Что вы хотите взять?:")
+    it = input()
+
+    for item in list_items:
+        if item.name == it:
+            char_inventory.add_item(item)
+            print(f"id: {item.item_id}, name: {item.name}, count: {item.count}")
+            list_items.remove(item)
+            paragrapsh[id]['items'].remove({'id':item.item_id,'count':item.count})
 
 
 if __name__ == '__main__':
@@ -529,29 +590,52 @@ if __name__ == '__main__':
     BalckCastleDungenon.prepare_enviroment()
     # BalckCastleDungenon.create_character()
     BalckCastleDungenon.load_character()
-    print("Шаг первый. создать персонаж + инвентарь.")
-    print(f"Имя:{BalckCastleDungenon.char.name}\n"
-          f"Ловкость:{BalckCastleDungenon.char.max_agility}\n"
-          f"Сила:{BalckCastleDungenon.char.max_strange}\n"
-          f"Харизма:{BalckCastleDungenon.char.max_charm}\n"
-          f"Удача:{BalckCastleDungenon.char.lucky}\n"
-          f"Меч:{BalckCastleDungenon.char.sword}\n")
-    print(f"инвентарь:")
-    for item in BalckCastleDungenon.char_inventory.char_items:
-        if BalckCastleDungenon.char_inventory.char_items[item] is not None:
-            print(BalckCastleDungenon.char_inventory.char_items[item].item_id, BalckCastleDungenon.char_inventory.char_items[item].name,
-                  BalckCastleDungenon.char_inventory.char_items[item].count)
-    list_enemys = []
-    # paragraph = 628
-    paragraph = 6
-    enemys_from_bd = GameEnemysModel.select().where(GameEnemysModel.paragraph == paragraph)
-    for enemy in enemys_from_bd:
-        list_enemys.append(Enemy(enemy))
-    print('----------------------------------------ПОДЕРЁМСЯ----------------------------------------')
-    BalckCastleDungenon.char.current_strange = 100
-    battle = Game_Battle(BalckCastleDungenon.char, list_enemys)
-    battle.round_preparation()
-    if battle.char_winner:
-        print('ты победил!')
-    else:
-        print('ты проиграл')
+    print('Предыстория, поехали!')
+
+    action = BalckCastleDungenon.state
+    while True:
+        if action == 'exit':
+            break
+        scene = Scene(action, BalckCastleDungenon.parapraphs)
+        cross = 0
+        print_description(scene.description)
+        if len(scene.crossing) == 1:
+            if scene.crossing[0] == 999:
+                print('Ты проиграл')
+                break
+        print(f'\nчто делать? варианты:{scene.crossing}, stats - инфо о персонаже, inv - инвентарь')
+        while True:
+            action = input()
+            try:
+                cross = int(action)
+                BalckCastleDungenon.state = cross
+            except:
+                pass
+            if action == 'stats':
+                get_information_about_char(BalckCastleDungenon.char)
+            elif action == 'inv':
+                get_information_about_inventory(BalckCastleDungenon.char_inventory)
+            elif action == 'env':
+                get_information_about_env_items(scene.list_items)
+            elif action == 'get_item':
+                get_env_item(scene.list_items,BalckCastleDungenon.char_inventory,BalckCastleDungenon.parapraphs,scene.paragrph_id)
+            elif action == 'exit':
+                BalckCastleDungenon.save_character_to_base()
+                BalckCastleDungenon.save_inventory_to_base()
+                BalckCastleDungenon.save_char_spell_book_to_base()
+                break
+            elif cross in scene.crossing:
+                break
+            else:
+                print('нет такого выбора, давай ещё')
+
+# paragraph = 628
+print('конец')
+# print('----------------------------------------ПОДЕРЁМСЯ----------------------------------------')
+# BalckCastleDungenon.char.current_stamina = 100
+# battle = Game_Battle(BalckCastleDungenon.char, list_enemys)
+# battle.round_preparation()
+# if battle.char_winner:
+#     print('ты победил!')
+# else:
+#     print('ты проиграл')
