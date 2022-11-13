@@ -1,3 +1,4 @@
+'''Модели БД, для peewee'''
 from peewee import *
 
 dbhandler = SqliteDatabase('dungeon.db')
