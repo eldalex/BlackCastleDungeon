@@ -1,3 +1,4 @@
+'''Класс реализующий инвентарь персонажа'''
 from modelsdungeon import *
 class Character_Inventory:
     def __init__(self, user_id, count_slot=7):
@@ -53,6 +54,11 @@ class Character_Inventory:
                 if self.char_items[item].item_id == item_id:
                     self.char_items[item].count -= count
 
+    def clean_zero_inventory(self):
+        for ch_item in self.char_items:
+            if self.char_items[ch_item] is not None:
+                if self.char_items[ch_item].count == 0:
+                    self.char_items[ch_item]=None
     # def get_item(self, id):
     #     item = GameItemsModel.get(id=id)
     #     return item
