@@ -1,4 +1,4 @@
-
+''' Класс реализующий битву'''
 class Game_Battle:
     def __init__(self, char, list_enemy, special_condition=None):
         self.char = char
