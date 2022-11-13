@@ -1,3 +1,4 @@
+'''класс реализующий игровые предметы.'''
 class Game_Items:
     def __init__(self, item_id, name, count=1, paragraph=0):
         self.item_id = item_id
