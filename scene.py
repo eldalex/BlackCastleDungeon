@@ -1,3 +1,4 @@
+'''Игровая сцена, текущее состояние игры.'''
 from modelsdungeon import *
 from game_items import Game_Items
 class Scene:
