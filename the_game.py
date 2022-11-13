@@ -1,3 +1,4 @@
+'''Подготовка игры. загрузка предметов, создание/загруска персонажа, проверки'''
 from modelsdungeon import *
 from game_character import Game_Character
 from character_inventory import Character_Inventory
