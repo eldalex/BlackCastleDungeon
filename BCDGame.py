@@ -1,3 +1,4 @@
+'''Основная игра'''
 from dice import roll_the_dice
 import json
 import peewee
@@ -80,6 +81,8 @@ def get_money_count(char_inventory):
     return ch_money_count
 
 
+
+
 def get_buy_item(list_shop, char_inventory, paragrapsh, id):
     print(f"Что вы хотите купить?:")
     for item in list_shop:
@@ -99,41 +102,29 @@ def get_buy_item(list_shop, char_inventory, paragrapsh, id):
             print('некорректный ввод')
 
     ch_money = get_money_count(char_inventory)
-    if buy_item['cost'] > ch_money:
-        print('недостаточно денег')
-    else:
-        bd_item = GameItemsModel.get(id=buy_item["id"])
-        new_item_for_char = Game_Items(bd_item.item_id, bd_item.item_name, count=1, paragraph=bd_item.paragraph)
-        char_inventory.add_item(new_item_for_char)
-        char_inventory.decrement_count(1, buy_item['cost'])
-        buy_item["shop_item"].count -= 1
-        if buy_item["shop_item"].count == 0:
-            for item in list_shop:
-                if item['item'].item_id == it:
-                    list_shop.remove(item)
-            for item in paragrapsh[id]["shop"]:
-                if item['id'] == it:
-                    paragrapsh[id]["shop"].remove(item)
-        else:
-            for item in paragrapsh[id]["shop"]:
-                if item['id'] == it:
-                    item['count'] -= 1
-
-    ch_money = get_money_count(char_inventory)
-    if ch_money == 0:
-        char_inventory.delete_item(1)
-
     if ch_money is not None:
-        print(ch_money)
+        if buy_item['cost'] > ch_money:
+            print('недостаточно денег')
+        else:
+            bd_item = GameItemsModel.get(id=buy_item["id"])
+            new_item_for_char = Game_Items(bd_item.item_id, bd_item.item_name, count=1, paragraph=bd_item.paragraph)
+            char_inventory.add_item(new_item_for_char)
+            char_inventory.decrement_count(1, buy_item['cost'])
+            buy_item["shop_item"].count -= 1
+            if buy_item["shop_item"].count == 0:
+                for item in list_shop:
+                    if item['item'].item_id == it:
+                        list_shop.remove(item)
+                for item in paragrapsh[id]["shop"]:
+                    if item['id'] == it:
+                        paragrapsh[id]["shop"].remove(item)
+            else:
+                for item in paragrapsh[id]["shop"]:
+                    if item['id'] == it:
+                        item['count'] -= 1
+        char_inventory.clean_zero_inventory()
     else:
         print('У вас нет денег')
-
-        #
-        # char_inventory.add_item(item)
-        # print(f"id: {item.item_id}, name: {item.name}, count: {item.count}")
-        # list_items.remove(item)
-        # paragrapsh[id]['items'].remove({'id':item.item_id,'count':item.count})
-
 
 if __name__ == '__main__':
     BalckCastleDungenon = TheGame(user_id)
