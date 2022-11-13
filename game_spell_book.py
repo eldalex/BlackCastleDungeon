@@ -1,4 +1,4 @@
-
+'''Классы книги заклинаний и самих заклинаний.'''
 class Game_Spell_Book:
     def __init__(self, user_id):
         self.user_id = user_id
