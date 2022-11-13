@@ -1,5 +1,5 @@
+''' бросок кубика (1 или 2)'''
 import random
-
 
 def roll_the_dice(count):
     dice1 = random.randrange(1, 7)
