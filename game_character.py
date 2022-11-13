@@ -1,4 +1,4 @@
-
+'''Класс реализующий игрового персонажа'''
 class Game_Character:
     def __init__(self, name, max_skill, current_skill, max_stamina, current_stamina, lucky):
         self.name = name
