@@ -1,6 +1,7 @@
 '''Игровая сцена, текущее состояние игры.'''
 from modelsdungeon import *
 from game_items import Game_Items
+from game_shop import Game_Shop
 class Scene:
     def __init__(self, paragrph_id, paragraphs):
         self.paragrph_id = str(paragrph_id)
@@ -31,9 +32,8 @@ class Scene:
         self.crossing = self.paragraphs[self.paragrph_id]["crossing"]
 
     def prepare_shop(self):
-        self.list_shop = []
+        gsh = Game_Shop()
         if "shop" in self.paragraphs[self.paragrph_id]:
             for i in self.paragraphs[self.paragrph_id]["shop"]:
-                bd_item = GameItemsModel.get(id=i["id"])
-                item = Game_Items(bd_item.item_id, bd_item.item_name, count=i["count"], paragraph=bd_item.paragraph)
-                self.list_shop.append({"item": item, "price": i["price"]})
+                gsh.add_shop_item(i["id"],i["count"],i["price"])
+        self.list_shop = gsh
