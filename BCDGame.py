@@ -11,6 +11,7 @@ from character_inventory import Character_Inventory
 from game_character import Game_Character
 from game_battle import Game_Battle
 from game_battle import Enemy
+from game_shop import Shop_item
 
 user_id = 1606686846
 
@@ -81,50 +82,53 @@ def get_money_count(char_inventory):
     return ch_money_count
 
 
+def list_shop_items(list_shop):
+    print(f"Что вы хотите купить?:")
+    for item in list_shop.shop_items:
+        print(f"{item.id}: {item.name}, количество:{item.count}, цена:{item.price}")
+    print('exit: Выйти из магазина')
 
 
 def get_buy_item(list_shop, char_inventory, paragrapsh, id):
-    print(f"Что вы хотите купить?:")
-    for item in list_shop:
-        print(f"id:{item['item'].item_id}, {item['item'].name}, количество:{item['item'].count}, цена:{item['price']}")
     while True:
-        try:
-            it = int(input())
-            buy_item = None
-            for item in list_shop:
-                if item['item'].item_id == it:
-                    buy_item = {"id": item['item'].item_id, "shop_item": item['item'], "cost": item['price']}
-            if buy_item is None:
-                print('Некорректный ввод')
-            else:
-                break
-        except:
-            print('некорректный ввод')
-
-    ch_money = get_money_count(char_inventory)
-    if ch_money is not None:
-        if buy_item['cost'] > ch_money:
-            print('недостаточно денег')
+        list_shop_items(list_shop)
+        choise = input()
+        if choise != 'exit':
+            try:
+                choise = int(choise)
+            except:
+                print('Не понимаю о чем вы!')
+                choise = None
+            if choise is not None:
+                buy_item: Shop_item = None
+                for item in list_shop.shop_items:
+                    if item.id == choise:
+                        buy_item = item
+                if buy_item is not None:
+                    ch_money = get_money_count(char_inventory)
+                    if ch_money is not None:
+                        if buy_item.price > ch_money:
+                            print('К сожалению вам не хватит на это денег, выберите что то другое или уходите.')
+                        else:
+                            bd_item = GameItemsModel.get(buy_item.id)
+                            new_item_for_char = Game_Items(bd_item.item_id, bd_item.item_name, count=1,paragraph=bd_item.paragraph)
+                            char_inventory.add_item(new_item_for_char)
+                            char_inventory.decrement_count(1, buy_item.price)
+                            buy_item.decrement_item()
+                            list_shop.check_count()
+                            char_inventory.clean_zero_inventory()
+                    else:
+                        print('Похоже что вы где то оставили свой кошелёк,в кредит незнакомцам я не даю.\nВозвращайтесь когда у вас будут деньги!')
+                        break
+                else:
+                    print('Увы, такого у меня нет, но ты посмотри на остальные товары!')
         else:
-            bd_item = GameItemsModel.get(id=buy_item["id"])
-            new_item_for_char = Game_Items(bd_item.item_id, bd_item.item_name, count=1, paragraph=bd_item.paragraph)
-            char_inventory.add_item(new_item_for_char)
-            char_inventory.decrement_count(1, buy_item['cost'])
-            buy_item["shop_item"].count -= 1
-            if buy_item["shop_item"].count == 0:
-                for item in list_shop:
-                    if item['item'].item_id == it:
-                        list_shop.remove(item)
-                for item in paragrapsh[id]["shop"]:
-                    if item['id'] == it:
-                        paragrapsh[id]["shop"].remove(item)
-            else:
-                for item in paragrapsh[id]["shop"]:
-                    if item['id'] == it:
-                        item['count'] -= 1
-        char_inventory.clean_zero_inventory()
-    else:
-        print('У вас нет денег')
+            paragrapsh[id]["shop"] = []
+            for item in list_shop.shop_items:
+                paragrapsh[id]["shop"].append({"id": item.id, "count":item.count, "price":item.price})
+            print('Досвидания, приходите к нам ещё!')
+            break
+
 
 if __name__ == '__main__':
     BalckCastleDungenon = TheGame(user_id)
