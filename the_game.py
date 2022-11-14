@@ -5,6 +5,7 @@ from character_inventory import Character_Inventory
 from game_items import Game_Items
 from game_spell_book import Game_Spell_Book
 from game_spell_book import Game_Spell
+import dice
 
 user_id = 1606686846
 import json
@@ -171,10 +172,10 @@ class TheGame:
 
     def setup_char(self):
         print('Крутим кубы')
-        skill = roll_the_dice(1) + 6
-        dice1, dice2 = roll_the_dice(2)
+        skill = dice.roll_the_dice(1) + 6
+        dice1, dice2 = dice.roll_the_dice(2)
         stamina = dice1 + dice2 + 12
-        luck = roll_the_dice(1) + 6
+        luck = dice.roll_the_dice(1) + 6
         self.char = Game_Character(name='Alex',
                                    max_skill=skill,
                                    current_skill=skill,
