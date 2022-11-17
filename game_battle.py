@@ -1,4 +1,7 @@
 ''' Класс реализующий битву'''
+import modelsdungeon
+
+
 class Game_Battle:
     def __init__(self, char, list_enemy, special_condition=None):
         self.char = char
@@ -100,7 +103,7 @@ class Enemy:
         self.id = bd_enemy.id
         self.name = bd_enemy.name
         self.nameRU = bd_enemy.nameRU
-        self.paragraph = int(bd_enemy.action)
+        self.paragraph = int(bd_enemy.paragraph)
         self.agility = int(bd_enemy.agility)
         self.strange = int(bd_enemy.strange)
         self.delay = int(bd_enemy.delay)

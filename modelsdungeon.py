@@ -18,6 +18,7 @@ class GameCharacterModel(BaseModel):
     current_stamina = IntegerField(column_name='CurrentStamina', null=False)
     lucky = IntegerField(column_name='Lucky', null=False)
     state = IntegerField(column_name='State', null=False)
+    history_of_travel = TextField(column_name='History_of_travel', null=False)
     paragraphs = TextField(column_name='Paragraphs', null=False)
 
     class Meta:
@@ -51,6 +52,7 @@ class GameItemsModel(BaseModel):
 
 
 class GameSpellsModel(BaseModel):
+    spell_id = IntegerField(column_name='spell_id', null=False)
     name = TextField(column_name='Name', null=False, unique=True)
     description = TextField(column_name='Description', null=False)
 

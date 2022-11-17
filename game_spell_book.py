@@ -27,6 +27,19 @@ class Game_Spell_Book:
                 break
         return free
 
+    def check_spell_in_book(self,id):
+        for spell in self.spells:
+            if self.spells[spell].id == id:
+                return True
+        return False
+
+    def del_spell_from_book(self,sp_id):
+        for spell in self.spells:
+            if self.spells[spell] is not None and self.spells[spell].id == sp_id:
+                self.char_spell_book.spells[spell] = None
+                break
+
+
 class Game_Spell:
     def __init__(self, spell_from_bd):
         self.id = spell_from_bd.id

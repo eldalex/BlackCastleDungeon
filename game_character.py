@@ -9,7 +9,10 @@ class Game_Character:
         self.lucky = lucky
         self.sword = 0
         self.power_punch = None
+        self.power_punch_modifikator = 0
         self.is_alive = True
+        self.history_of_travel=[1]
+        self.skill_modificator=0
 
     def delete_lucky(self):
         try:
